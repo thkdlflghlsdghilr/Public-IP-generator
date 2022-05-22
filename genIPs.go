@@ -8,10 +8,12 @@ import (
 )
 
 func main() {
-	output := flag.Bool("o", false, "Output generated IPs to stdout with newlines")
+	stdout := flag.Bool("o", true, "Outputs generated IPs to stdout with newlines")
+	write := flag.String("w", "", "Outputs generated IPs to file separated with newlines")
+	timeBool := flag.Bool("t", true, "Prints time it took to generate IPs once finished")
 	flag.Parse()
 	start := time.Now()
-	f, err := os.OpenFile("all_public_ips.txt", os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(*write, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -24,18 +26,22 @@ func main() {
 					// using gross list of ifs to check, it works and it's fast so ima leave it
 					// might just move ijkl's value forward instead of returning false to imporve performance
 					if is_public_ip(i, j, k, l) {
-						if *output {
+						if *stdout {
 							fmt.Printf("%d.%d.%d.%d\n", i, j, k, l)
 						}
-						if _, err := f.WriteString(fmt.Sprintf("%d.%d.%d.%d\n", i, j, k, l)); err != nil {
-							panic(err)
+						if *write != "" {
+							if _, err := f.WriteString(fmt.Sprintf("%d.%d.%d.%d\n", i, j, k, l)); err != nil {
+								panic(err)
+							}
 						}
 					}
 				}
 			}
 		}
 	}
-	fmt.Printf("IP list genaration took %s", time.Since(start))
+	if *timeBool {
+		fmt.Printf("IP list genaration took %s", time.Since(start))
+	}
 }
 
 func is_public_ip(i int, j int, k int, l int) bool {
