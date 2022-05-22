@@ -40,7 +40,7 @@ func main() {
 		}
 	}
 	if *timeBool {
-		fmt.Printf("IP list genaration took %s", time.Since(start))
+		fmt.Printf("IP list genaration took %s\n", time.Since(start))
 	}
 }
 
