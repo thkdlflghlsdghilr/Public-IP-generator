@@ -64,40 +64,49 @@ func is_public_ip(i int, j int, k int, l int) bool {
 	// 240.0.0.0 - 255.255.255.255 Reserved for future use + Reserved for the "limited broadcast" destination address
 
 	// This list is not the same order as the above list. My OCD is killing me but I'm too lazy to fix it XD
-	// also very icky list of if statements, there has got to be a better way to do this (maybe function for checking if number is in range???)
-	if i == 10 && (j >= 0 && j <= 255) && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	// also very icky list of if statements, there has got to be a better way to do this
+	if i == 10 && check_range(0, 255, j) && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
-	} else if i == 172 && (j >= 16 && j <= 31) && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	} else if i == 172 && check_range(16, 31, j) && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
-	} else if i == 192 && j == 168 && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	} else if i == 192 && j == 168 && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
-	} else if i == 169 && j == 254 && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	} else if i == 169 && j == 254 && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
-	} else if i == 127 && (j >= 0 && j <= 255) && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	} else if i == 127 && check_range(0, 255, j) && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
-	} else if i == 0 && (j >= 0 && j <= 255) && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	} else if i == 0 && check_range(0, 255, j) && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
-	} else if i == 192 && j == 0 && k == 0 && (l >= 0 && l <= 255) {
+	} else if i == 192 && j == 0 && k == 0 && check_range(0, 255, l) {
 		return false
-	} else if i == 192 && j == 0 && k == 2 && (l >= 0 && l <= 255) {
+	} else if i == 192 && j == 0 && k == 2 && check_range(0, 255, l) {
 		return false
-	} else if i == 192 && j == 88 && k == 99 && (l >= 0 && l <= 255) {
+	} else if i == 192 && j == 88 && k == 99 && check_range(0, 255, l) {
 		return false
-	} else if i == 198 && (j == 18 || j == 19) && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	} else if i == 198 && (j == 18 || j == 19) && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
-	} else if i == 198 && j == 51 && k == 100 && (l >= 0 && l <= 255) {
+	} else if i == 198 && j == 51 && k == 100 && check_range(0, 255, l) {
 		return false
-	} else if i == 100 && (j >= 64 && j <= 127) && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	} else if i == 100 && check_range(64, 127, j) && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
-	} else if i == 203 && j == 0 && k == 113 && (l >= 0 && l <= 255) {
+	} else if i == 203 && j == 0 && k == 113 && check_range(0, 255, l) {
 		return false
-	} else if (i >= 224 && i <= 239) && (j >= 0 && j <= 255) && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	} else if check_range(224, 239, l) && check_range(0, 255, j) && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
-	} else if i == 233 && j == 252 && k == 0 && (l >= 0 && l <= 255) {
+	} else if i == 233 && j == 252 && k == 0 && check_range(0, 255, l) {
 		return false
-	} else if (i >= 240 && i <= 255) && (j >= 0 && j <= 255) && (k >= 0 && k <= 255) && (l >= 0 && l <= 255) {
+	} else if check_range(240, 255, i) && check_range(0, 255, j) && check_range(0, 255, k) && check_range(0, 255, l) {
 		return false
 	} else {
 		return true
+	}
+}
+
+// This is inclusive!!!
+func check_range(min int, max int, value int) bool {
+	if value >= min && value <= max {
+		return true
+	} else {
+		return false
 	}
 }
